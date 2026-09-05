@@ -1,6 +1,6 @@
 {
   "name": "skill-tailwind",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Zero-dependency check/lint/codegen scripts for the skill-tailwind AI skill (Tailwind CSS v4). Not published to the npm registry yet — this is local scaffolding a maintainer could publish on npm.",
   "private": false,
   "type": "module",
