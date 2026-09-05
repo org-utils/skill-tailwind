@@ -1,0 +1,77 @@
+<!--
+  EXAMPLE · stepper · Approach (B): BEM + @apply — markup for stepper.bem.scss.
+
+  Same UI as stepper.utility.html (4 steps: completed, current, error, upcoming,
+  plus a content panel with Back/Next), but the markup carries SEMANTIC BEM
+  classes; the look lives in stepper.bem.scss.
+
+  BEM convention (default): block `stepper`; element via single hyphen
+  (`stepper-item`, `stepper-circle`, `stepper-line`, `stepper-label`); modifier
+  via single underscore (`stepper-item_completed`). Configurable — follow your
+  project's scheme if it already declares one.
+
+  HONEST SCOPE LIMIT: this is the CSS/markup for a given static "current step"
+  value only. Advancing steps, validating before Next, and focus management are
+  JS/framework state, not shown here — same limit as stepper.utility.html.
+
+  Tokens are the canonical SEMANTIC ones (templates/theme.css); values are
+  placeholders under your design system. Dark theme comes for free via .dark.
+-->
+
+<div class="stepperDemo">
+
+  <!-- ── Step indicator ──────────────────────────────────────── -->
+  <ol class="stepper" aria-label="Checkout progress">
+
+    <li class="stepper-item stepper-item_completed">
+      <div class="stepper-row">
+        <span class="stepper-circle" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none">
+            <path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="stepper-line stepper-line_passed" aria-hidden="true"></span>
+      </div>
+      <span class="stepper-label">Account</span>
+    </li>
+
+    <li class="stepper-item stepper-item_current" aria-current="step">
+      <div class="stepper-row">
+        <span class="stepper-circle">2</span>
+        <span class="stepper-line" aria-hidden="true"></span>
+      </div>
+      <span class="stepper-label">Shipping</span>
+    </li>
+
+    <li class="stepper-item stepper-item_error">
+      <div class="stepper-row">
+        <span class="stepper-circle" aria-label="Payment: has an error">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 4.5v4M8 11h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="stepper-line" aria-hidden="true"></span>
+      </div>
+      <span class="stepper-label">Payment</span>
+    </li>
+
+    <li class="stepper-item">
+      <div class="stepper-row">
+        <span class="stepper-circle">4</span>
+      </div>
+      <span class="stepper-label">Review</span>
+    </li>
+  </ol>
+
+  <!-- ── Step content panel + navigation (Next/Back logic is JS) ── -->
+  <div class="stepperPanel">
+    <h2 class="stepperPanel-title">Shipping address</h2>
+    <p class="stepperPanel-hint">Step content for the current step goes here.</p>
+
+    <div class="stepperPanel-actions">
+      <button type="button" class="stepperPanel-back">Back</button>
+      <button type="button" class="stepperPanel-next">Next</button>
+    </div>
+  </div>
+
+</div>

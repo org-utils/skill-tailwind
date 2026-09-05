@@ -1,0 +1,145 @@
+/*
+  EXAMPLE · stepper · Approach (B): BEM + @apply — styles for stepper.bem.html.
+
+  Same UI as stepper.utility.html, expressed with @apply grouped by property
+  kind. Group order follows the engine's property-order: layout/position →
+  size → spacing → background/border/shape → typography → effects/motion →
+  interaction; then nested states; then modifiers.
+
+  BEM convention (default): block `stepper`; element via single hyphen;
+  modifier via single underscore. `&`-nesting concatenates the literal suffix
+  onto the parent, so `&-circle` yields `.stepper-circle` and `&_completed`
+  yields `.stepper-item_completed`.
+
+  @reference — REQUIRED if this SCSS is compiled SEPARATELY from your Tailwind
+  entry: point it at the entry that does `@import "tailwindcss"`, otherwise
+  @apply cannot see the utilities/tokens. Drop this line if the file is part
+  of the same build that already imports tailwindcss.
+
+    @reference "../app.css";   // ← path to YOUR entry that imports tailwindcss
+
+  Tokens are the canonical SEMANTIC ones (templates/theme.css). Because every
+  color is a token that .dark overrides, the dark theme needs no extra rules.
+*/
+
+/* ───────────────────────── Stepper ───────────────────────── */
+
+.stepper {
+  @apply flex items-start;
+
+  &-item {
+    @apply flex flex-1 flex-col items-center gap-2;
+
+    &:last-child {
+      @apply flex-none;
+    }
+
+    /* element: row holding the circle + connecting line */
+    & > .stepper-row {
+      @apply flex w-full items-center;
+    }
+  }
+
+  &-circle {
+    @apply flex size-8 shrink-0 items-center justify-center;
+    @apply rounded-full border border-border;
+    @apply bg-background text-sm font-medium text-muted-foreground;
+
+    & svg {
+      @apply size-4;
+    }
+  }
+
+  &-line {
+    @apply mx-2 h-px flex-1;
+    @apply bg-border;
+
+    &_passed {
+      @apply bg-primary;
+    }
+  }
+
+  &-label {
+    @apply text-xs font-medium text-muted-foreground;
+  }
+
+  /* ── state modifiers (target the circle/label within the item) ── */
+  &-item_completed {
+    & .stepper-circle {
+      @apply border-transparent bg-primary text-primary-foreground;
+    }
+    & .stepper-label {
+      @apply text-foreground;
+    }
+  }
+
+  &-item_current {
+    & .stepper-circle {
+      @apply border-2 border-primary bg-background font-semibold text-primary;
+      @apply outline-2 outline-offset-2 outline-ring;
+    }
+    & .stepper-label {
+      @apply text-foreground;
+    }
+  }
+
+  &-item_error {
+    & .stepper-circle {
+      @apply border-2 border-danger bg-background font-semibold text-danger;
+    }
+    & .stepper-label {
+      @apply text-danger;
+    }
+  }
+}
+
+/* ───────────────────── Step content panel ───────────────────── */
+
+.stepperPanel {
+  @apply rounded-lg border border-border;
+  @apply p-4;
+  @apply bg-card text-card-foreground;
+
+  &-title {
+    @apply text-sm font-semibold;
+  }
+
+  &-hint {
+    @apply mt-1;
+    @apply text-sm text-muted-foreground;
+  }
+
+  &-actions {
+    @apply mt-4 flex items-center justify-between;
+  }
+
+  &-back,
+  &-next {
+    @apply inline-flex h-9 items-center justify-center;
+    @apply px-3;
+    @apply rounded-md text-sm font-medium;
+    @apply transition-colors duration-150;
+    @apply cursor-pointer;
+
+    &:focus-visible {
+      @apply outline-2 outline-offset-2 outline-ring;
+    }
+  }
+
+  &-back {
+    @apply border border-border bg-background text-foreground;
+    &:hover { @apply bg-muted; }
+  }
+
+  &-next {
+    @apply border border-transparent bg-primary px-4 text-primary-foreground;
+    &:hover { @apply bg-primary/90; }
+  }
+}
+
+/* ───────────────────── Demo wrapper (layout only) ───────────────────── */
+
+.stepperDemo {
+  @apply flex flex-col gap-8;
+  @apply bg-background p-6 text-foreground;
+}

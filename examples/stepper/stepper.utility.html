@@ -1,0 +1,128 @@
+<!--
+  EXAMPLE · stepper · Approach (A): UTILITY-FIRST — classes live in the markup.
+
+  Same UI as stepper.bem.html, so you can diff A vs B on identical structure.
+  Framework-agnostic: plain HTML, no JS, no build step assumed here.
+
+  HONEST SCOPE LIMIT (read this — it is the point of the example): a stepper's
+  VISUAL states (upcoming / current / completed / error) are pure CSS given a
+  static "current step" value, which is all this markup shows. Advancing
+  between steps, validating a step before allowing Next, and moving focus to
+  the new step's heading are all JS/framework state — not shown here.
+
+  Tokens are the canonical SEMANTIC ones from templates/theme.css (bg-primary /
+  text-primary-foreground for completed+current, bg-muted / text-muted-foreground
+  for upcoming, bg-danger / text-danger-foreground for the error step, bg-border
+  for the connecting line). Replace the token VALUES under your design system;
+  the NAMES stay stable. Dark theme works for free via .dark.
+
+  States per step circle: completed (check glyph) · current (filled + ring) ·
+  upcoming (outline only) · error (danger tone). The connecting line segment to
+  the LEFT of a step reflects whether that step has been passed.
+-->
+
+<div class="flex flex-col gap-8 bg-background p-6 text-foreground">
+
+  <!-- ── Step indicator ──────────────────────────────────────── -->
+  <ol class="flex items-start" aria-label="Checkout progress">
+
+    <!-- step 1: completed -->
+    <li class="flex flex-1 flex-col items-center gap-2 last:flex-none">
+      <div class="flex w-full items-center">
+        <span
+          class="flex size-8 shrink-0 items-center justify-center rounded-full
+                 bg-primary text-primary-foreground
+                 text-sm font-medium"
+          aria-hidden="true"
+        >
+          <svg class="size-4" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <!-- connector to the next step: passed → primary, not yet → border -->
+        <span class="mx-2 h-px flex-1 bg-primary" aria-hidden="true"></span>
+      </div>
+      <span class="text-xs font-medium text-foreground">Account</span>
+    </li>
+
+    <!-- step 2: current -->
+    <li class="flex flex-1 flex-col items-center gap-2 last:flex-none" aria-current="step">
+      <div class="flex w-full items-center">
+        <span
+          class="flex size-8 shrink-0 items-center justify-center rounded-full
+                 border-2 border-primary bg-background text-primary
+                 text-sm font-semibold
+                 outline-2 outline-offset-2 outline-ring"
+        >
+          2
+        </span>
+        <span class="mx-2 h-px flex-1 bg-border" aria-hidden="true"></span>
+      </div>
+      <span class="text-xs font-medium text-foreground">Shipping</span>
+    </li>
+
+    <!-- step 3: error (needs attention before continuing) -->
+    <li class="flex flex-1 flex-col items-center gap-2 last:flex-none">
+      <div class="flex w-full items-center">
+        <span
+          class="flex size-8 shrink-0 items-center justify-center rounded-full
+                 border-2 border-danger bg-background text-danger
+                 text-sm font-semibold"
+          aria-label="Payment: has an error"
+        >
+          <svg class="size-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 4.5v4M8 11h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="mx-2 h-px flex-1 bg-border" aria-hidden="true"></span>
+      </div>
+      <span class="text-xs font-medium text-danger">Payment</span>
+    </li>
+
+    <!-- step 4: upcoming -->
+    <li class="flex flex-1 flex-col items-center gap-2 last:flex-none">
+      <div class="flex w-full items-center">
+        <span
+          class="flex size-8 shrink-0 items-center justify-center rounded-full
+                 border border-border bg-background text-muted-foreground
+                 text-sm font-medium"
+        >
+          4
+        </span>
+      </div>
+      <span class="text-xs font-medium text-muted-foreground">Review</span>
+    </li>
+  </ol>
+
+  <!-- ── Step content panel + navigation (Next/Back logic is JS) ── -->
+  <div class="rounded-lg border border-border bg-card p-4 text-card-foreground">
+    <h2 class="text-sm font-semibold">Shipping address</h2>
+    <p class="mt-1 text-sm text-muted-foreground">Step content for the current step goes here.</p>
+
+    <div class="mt-4 flex items-center justify-between">
+      <button
+        type="button"
+        class="inline-flex h-9 items-center justify-center rounded-md border border-border
+               bg-background px-3 text-sm font-medium text-foreground
+               transition-colors duration-150
+               hover:bg-muted
+               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+               cursor-pointer"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="inline-flex h-9 items-center justify-center rounded-md border border-transparent
+               bg-primary px-4 text-sm font-medium text-primary-foreground
+               transition-colors duration-150
+               hover:bg-primary/90
+               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+               cursor-pointer"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+
+</div>

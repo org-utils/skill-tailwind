@@ -1,0 +1,186 @@
+<!--
+  EXAMPLE · multi-select · Approach (A): UTILITY-FIRST — classes live in the markup.
+
+  Same UI as multi-select.bem.html, so you can diff A vs B on identical structure.
+  Framework-agnostic: plain HTML, no JS, no build step assumed here.
+
+  HONEST SCOPE LIMIT (read this — it is the point of the example): this is a
+  tag/chip multi-select, which needs REAL JS behaviour — live filtering of the
+  option list as you type, keyboard nav (Arrow/Enter/Backspace-to-remove-last-
+  tag), toggling an option in/out of the selection, and outside-click to close.
+  That is the same "combobox needs a JS layer" limit SKILL.md states for
+  autocomplete/command-palette-style widgets. What follows are the STATIC visual
+  states only: empty, with N tags, focused-with-open-list, and disabled — the
+  CSS-only basis you wire real behaviour onto (mirrors the dropdown example's
+  CSS-only-base pattern, but here the "trigger" is a text input, not <summary>).
+
+  Tokens are the canonical SEMANTIC ones from templates/theme.css (border-input
+  for the field border, bg-accent/text-accent-foreground for tags and the
+  hovered option, bg-card/text-card-foreground for the option list surface,
+  outline-ring for focus). Replace the token VALUES under your design system;
+  the NAMES stay stable. Dark theme works for free via .dark.
+-->
+
+<div class="flex flex-col gap-8 bg-background p-6 text-foreground">
+
+  <!-- ── State: empty ────────────────────────────────────────── -->
+  <div class="flex flex-col gap-1.5">
+    <label for="ms-empty" class="text-sm font-medium text-foreground">Assignees</label>
+    <div
+      class="flex min-h-10 flex-wrap items-center gap-1.5
+             rounded-md border border-input bg-background px-2 py-1.5
+             transition-colors duration-150
+             focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring"
+    >
+      <input
+        id="ms-empty"
+        type="text"
+        placeholder="Search people…"
+        class="min-w-24 flex-1 bg-transparent px-1 py-0.5 text-sm text-foreground
+               placeholder:text-muted-foreground outline-none"
+      />
+    </div>
+  </div>
+
+  <!-- ── State: with N tags (closed) ─────────────────────────── -->
+  <div class="flex flex-col gap-1.5">
+    <label for="ms-tags" class="text-sm font-medium text-foreground">Assignees</label>
+    <div
+      class="flex min-h-10 flex-wrap items-center gap-1.5
+             rounded-md border border-input bg-background px-2 py-1.5
+             transition-colors duration-150
+             focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring"
+    >
+      <!-- tag: chip + remove button. Removal itself is a JS click handler. -->
+      <span class="inline-flex items-center gap-1 rounded-sm bg-accent py-0.5 ps-2 pe-1 text-xs font-medium text-accent-foreground">
+        Priya Shah
+        <button
+          type="button"
+          aria-label="Remove Priya Shah"
+          class="inline-flex size-4 items-center justify-center rounded-sm
+                 text-accent-foreground/70
+                 hover:bg-accent-foreground/10 hover:text-accent-foreground
+                 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring
+                 cursor-pointer"
+        >
+          <svg class="size-3" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </span>
+      <span class="inline-flex items-center gap-1 rounded-sm bg-accent py-0.5 ps-2 pe-1 text-xs font-medium text-accent-foreground">
+        Devon Cole
+        <button
+          type="button"
+          aria-label="Remove Devon Cole"
+          class="inline-flex size-4 items-center justify-center rounded-sm
+                 text-accent-foreground/70
+                 hover:bg-accent-foreground/10 hover:text-accent-foreground
+                 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring
+                 cursor-pointer"
+        >
+          <svg class="size-3" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </span>
+      <input
+        id="ms-tags"
+        type="text"
+        placeholder="Add more…"
+        class="min-w-24 flex-1 bg-transparent px-1 py-0.5 text-sm text-foreground
+               placeholder:text-muted-foreground outline-none"
+      />
+    </div>
+  </div>
+
+  <!-- ── State: focused, list open (option toggling is JS) ──────
+       :focus-within on the field simulates the "open" look; the list's
+       actual show/hide, filtering-as-you-type and Enter/Arrow handling
+       are JS, not shown statically here — the list is just rendered open. -->
+  <div class="relative flex flex-col gap-1.5">
+    <label for="ms-open" class="text-sm font-medium text-foreground">Assignees</label>
+    <div
+      class="flex min-h-10 flex-wrap items-center gap-1.5
+             rounded-md border border-input bg-background px-2 py-1.5
+             outline-2 outline-offset-2 outline-ring"
+    >
+      <span class="inline-flex items-center gap-1 rounded-sm bg-accent py-0.5 ps-2 pe-1 text-xs font-medium text-accent-foreground">
+        Priya Shah
+        <button type="button" aria-label="Remove Priya Shah" class="inline-flex size-4 items-center justify-center rounded-sm text-accent-foreground/70 hover:bg-accent-foreground/10 cursor-pointer">
+          <svg class="size-3" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </span>
+      <input
+        id="ms-open"
+        type="text"
+        value="d"
+        class="min-w-24 flex-1 bg-transparent px-1 py-0.5 text-sm text-foreground outline-none"
+      />
+    </div>
+
+    <ul
+      class="absolute left-0 top-full z-20 mt-1
+             w-full max-h-56 overflow-auto
+             rounded-md border border-border bg-card p-1 text-card-foreground shadow-lg"
+      role="listbox"
+      aria-label="Matching people"
+    >
+      <!-- option (hovered/active state) -->
+      <li>
+        <button
+          type="button"
+          role="option"
+          aria-selected="false"
+          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm
+                 text-foreground
+                 bg-accent text-accent-foreground
+                 cursor-pointer"
+        >
+          Devon Cole
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          role="option"
+          aria-selected="false"
+          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm
+                 text-foreground
+                 hover:bg-accent hover:text-accent-foreground
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+                 cursor-pointer"
+        >
+          Dana Ruiz
+        </button>
+      </li>
+      <li class="px-2 py-1.5 text-sm text-muted-foreground" role="status">No more matches</li>
+    </ul>
+  </div>
+
+  <!-- ── State: disabled ─────────────────────────────────────── -->
+  <div class="flex flex-col gap-1.5">
+    <label for="ms-disabled" class="text-sm font-medium text-muted-foreground">Assignees</label>
+    <div
+      class="flex min-h-10 flex-wrap items-center gap-1.5
+             rounded-md border border-input bg-muted px-2 py-1.5
+             opacity-50"
+    >
+      <span class="inline-flex items-center gap-1 rounded-sm bg-accent py-0.5 px-2 text-xs font-medium text-accent-foreground">
+        Priya Shah
+      </span>
+      <input
+        id="ms-disabled"
+        type="text"
+        disabled
+        placeholder="Add more…"
+        class="min-w-24 flex-1 bg-transparent px-1 py-0.5 text-sm text-foreground
+               placeholder:text-muted-foreground outline-none
+               disabled:cursor-not-allowed"
+      />
+    </div>
+  </div>
+
+</div>

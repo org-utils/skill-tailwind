@@ -1,0 +1,47 @@
+{
+  "name": "skill-tailwind",
+  "version": "0.0.1",
+  "description": "Zero-dependency check/lint/codegen scripts for the skill-tailwind AI skill (Tailwind CSS v4). Not published to the npm registry yet — this is local scaffolding a maintainer could publish on npm.",
+  "private": false,
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anwarkamal143/skill-tailwind.git"
+  },
+  "homepage": "https://github.com/Anwarkamal143/skill-tailwind#readme",
+  "bugs": {
+    "url": "https://github.com/Anwarkamal143/skill-tailwind/issues"
+  },
+  "bin": {
+    "skill-tailwind": "scripts/cli.mjs"
+  },
+  "scripts": {
+    "check-v3": "node scripts/check-v3-antipatterns.mjs",
+    "lint-dynamic": "node scripts/lint-dynamic-classes.mjs",
+    "lint-bem": "node scripts/lint-bem.mjs",
+    "lint-apply": "node scripts/lint-apply-grouping.mjs",
+    "tokens": "node scripts/validate-tokens.mjs",
+    "gen-types": "node scripts/generate-token-types.mjs",
+    "review": "node evals/harness.mjs",
+    "a11y": "node evals/a11y-check.mjs",
+    "check": "node scripts/cli.mjs all",
+    "changesets:init": "changeset init",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "publish": "changeset publish",
+    "release": "npm run pre-build && changeset publish"
+  },
+  "engines": {
+    "node": ">=22",
+    "bun": ">=1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.2"
+  }
+}

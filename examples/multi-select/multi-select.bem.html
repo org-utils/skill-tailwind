@@ -1,0 +1,94 @@
+<!--
+  EXAMPLE · multi-select · Approach (B): BEM + @apply — markup for multi-select.bem.scss.
+
+  Same UI as multi-select.utility.html (empty / N tags / focused-with-open-list /
+  disabled), but the markup carries SEMANTIC BEM classes; the look lives in
+  multi-select.bem.scss.
+
+  BEM convention (default): block `multiselect`; element via single hyphen
+  (`multiselect-tag`, `multiselect-input`, `multiselect-list`, `multiselect-option`);
+  modifier via single underscore (`multiselect_open`, `multiselect_disabled`).
+  Configurable — follow your project's scheme if it already declares one.
+
+  HONEST SCOPE LIMIT: same as multi-select.utility.html — filtering, keyboard
+  nav, tag add/remove and outside-click-to-close are a JS layer. This markup is
+  the static CSS-only basis for those four states.
+
+  Tokens are the canonical SEMANTIC ones (templates/theme.css); values are
+  placeholders under your design system. Dark theme comes for free via .dark.
+-->
+
+<div class="multiselectDemo">
+
+  <!-- ── State: empty ────────────────────────────────────────── -->
+  <div class="multiselectField">
+    <label for="ms-empty" class="multiselectField-label">Assignees</label>
+    <div class="multiselect">
+      <input id="ms-empty" type="text" placeholder="Search people…" class="multiselect-input" />
+    </div>
+  </div>
+
+  <!-- ── State: with N tags (closed) ─────────────────────────── -->
+  <div class="multiselectField">
+    <label for="ms-tags" class="multiselectField-label">Assignees</label>
+    <div class="multiselect">
+      <span class="multiselect-tag">
+        Priya Shah
+        <button type="button" aria-label="Remove Priya Shah" class="multiselect-tagRemove">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </span>
+      <span class="multiselect-tag">
+        Devon Cole
+        <button type="button" aria-label="Remove Devon Cole" class="multiselect-tagRemove">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </span>
+      <input id="ms-tags" type="text" placeholder="Add more…" class="multiselect-input" />
+    </div>
+  </div>
+
+  <!-- ── State: focused, list open (option toggling is JS) ────── -->
+  <div class="multiselectField multiselectField_relative">
+    <label for="ms-open" class="multiselectField-label">Assignees</label>
+    <div class="multiselect multiselect_open">
+      <span class="multiselect-tag">
+        Priya Shah
+        <button type="button" aria-label="Remove Priya Shah" class="multiselect-tagRemove">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </span>
+      <input id="ms-open" type="text" value="d" class="multiselect-input" />
+    </div>
+
+    <ul class="multiselect-list" role="listbox" aria-label="Matching people">
+      <li>
+        <button type="button" role="option" aria-selected="false" class="multiselect-option multiselect-option_active">
+          Devon Cole
+        </button>
+      </li>
+      <li>
+        <button type="button" role="option" aria-selected="false" class="multiselect-option">
+          Dana Ruiz
+        </button>
+      </li>
+      <li class="multiselect-empty" role="status">No more matches</li>
+    </ul>
+  </div>
+
+  <!-- ── State: disabled ─────────────────────────────────────── -->
+  <div class="multiselectField">
+    <label for="ms-disabled" class="multiselectField-label multiselectField-label_disabled">Assignees</label>
+    <div class="multiselect multiselect_disabled">
+      <span class="multiselect-tag">Priya Shah</span>
+      <input id="ms-disabled" type="text" disabled placeholder="Add more…" class="multiselect-input" />
+    </div>
+  </div>
+
+</div>

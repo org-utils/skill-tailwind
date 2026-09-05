@@ -1,0 +1,103 @@
+<!--
+  EXAMPLE · file-upload · Approach (B): BEM + @apply — markup for file-upload.bem.scss.
+
+  Same UI as file-upload.utility.html (default / dragover / populated / disabled),
+  but the markup carries SEMANTIC BEM classes; the look lives in
+  file-upload.bem.scss.
+
+  BEM convention (default): block `dropzone`; element via single hyphen
+  (`dropzone-icon`, `dropzone-input`, `dropzone-filelist`, `dropzone-fileRow`,
+  `dropzone-fileIcon`, `dropzone-fileName`, `dropzone-fileSize`, `dropzone-fileRemove`
+  — all FLAT elements of the block, multi-word joined camelCase, never chained);
+  modifier via single underscore (`dropzone_dragover`, `dropzone_disabled`).
+  Configurable — follow your project's scheme if it already declares one.
+
+  HONEST SCOPE LIMIT: same as file-upload.utility.html — the dragover state is
+  a class a dragenter/dragleave/drop listener toggles (CSS `:hover` cannot
+  express "a file is being dragged over"), and the file rows are rendered from
+  the selected FileList by JS. This markup is the static CSS-only basis.
+
+  Tokens are the canonical SEMANTIC ones (templates/theme.css); values are
+  placeholders under your design system. Dark theme comes for free via .dark.
+-->
+
+<div class="dropzoneDemo">
+
+  <!-- ── State: default ──────────────────────────────────────── -->
+  <div class="dropzoneField">
+    <span class="dropzoneField-label">Attachments</span>
+    <label for="fu-default" class="dropzone">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 16V4M7 9l5-5 5 5M5 20h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="dropzone-text">Drop files here or click to browse</span>
+      <span class="dropzone-hint">PNG, JPG, PDF up to 10MB</span>
+      <input id="fu-default" type="file" multiple class="dropzone-input" />
+    </label>
+  </div>
+
+  <!-- ── State: dragover (JS toggles this look on dragenter/dragleave) ── -->
+  <div class="dropzoneField">
+    <span class="dropzoneField-label">Attachments</span>
+    <label for="fu-dragover" class="dropzone dropzone_dragover">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 16V4M7 9l5-5 5 5M5 20h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="dropzone-text">Release to upload</span>
+      <input id="fu-dragover" type="file" multiple class="dropzone-input" />
+    </label>
+  </div>
+
+  <!-- ── State: populated with files ─────────────────────────── -->
+  <div class="dropzoneField">
+    <span class="dropzoneField-label">Attachments</span>
+    <label for="fu-files" class="dropzone">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 16V4M7 9l5-5 5 5M5 20h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="dropzone-text">Drop files here or click to browse</span>
+      <input id="fu-files" type="file" multiple class="dropzone-input" />
+    </label>
+
+    <!-- file rows: rendered from the selected FileList by JS -->
+    <ul class="dropzone-filelist">
+      <li class="dropzone-fileRow">
+        <svg class="dropzone-fileIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M14 3v5h5M6 3h9l5 5v13H6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+        </svg>
+        <span class="dropzone-fileName">quarterly-report.pdf</span>
+        <span class="dropzone-fileSize">2.4 MB</span>
+        <button type="button" aria-label="Remove quarterly-report.pdf" class="dropzone-fileRemove">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </li>
+      <li class="dropzone-fileRow">
+        <svg class="dropzone-fileIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M14 3v5h5M6 3h9l5 5v13H6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+        </svg>
+        <span class="dropzone-fileName">team-photo.png</span>
+        <span class="dropzone-fileSize">860 KB</span>
+        <button type="button" aria-label="Remove team-photo.png" class="dropzone-fileRemove">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── State: disabled ─────────────────────────────────────── -->
+  <div class="dropzoneField">
+    <span class="dropzoneField-label dropzoneField-label_disabled">Attachments</span>
+    <label for="fu-disabled" aria-disabled="true" class="dropzone dropzone_disabled">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 16V4M7 9l5-5 5 5M5 20h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="dropzone-text">Uploads disabled</span>
+      <input id="fu-disabled" type="file" multiple disabled class="dropzone-input" />
+    </label>
+  </div>
+
+</div>

@@ -1,0 +1,143 @@
+/*
+  EXAMPLE · file-upload · Approach (B): BEM + @apply — styles for file-upload.bem.html.
+
+  Same UI as file-upload.utility.html, expressed with @apply grouped by
+  property kind. Group order follows the engine's property-order:
+  layout/position → size → spacing → background/border/shape → typography →
+  effects/motion → interaction; then nested states; then modifiers.
+
+  BEM convention (default): block `dropzone`; element via single hyphen;
+  modifier via single underscore. `&`-nesting concatenates the literal suffix
+  onto the parent, so `&-icon` yields `.dropzone-icon` and `&_dragover` yields
+  `.dropzone_dragover`.
+
+  @reference — REQUIRED if this SCSS is compiled SEPARATELY from your Tailwind
+  entry: point it at the entry that does `@import "tailwindcss"`, otherwise
+  @apply cannot see the utilities/tokens. Drop this line if the file is part
+  of the same build that already imports tailwindcss.
+
+    @reference "../app.css";   // ← path to YOUR entry that imports tailwindcss
+
+  Tokens are the canonical SEMANTIC ones (templates/theme.css). Because every
+  color is a token that .dark overrides, the dark theme needs no extra rules.
+  `dropzone_dragover` is a STATE MODIFIER a JS listener toggles on dragenter/
+  dragleave/drop — CSS alone cannot express "a file is being dragged over".
+*/
+
+/* ───────────────────────── Field wrapper ───────────────────────── */
+
+.dropzoneField {
+  @apply flex flex-col gap-1.5;
+
+  &-label {
+    @apply text-sm font-medium text-foreground;
+
+    &_disabled {
+      @apply text-muted-foreground;
+    }
+  }
+}
+
+/* ───────────────────────── Dropzone ───────────────────────── */
+
+.dropzone {
+  @apply flex flex-col items-center justify-center gap-2;
+  @apply px-6 py-10;
+  @apply rounded-lg border-2 border-dashed border-input bg-background;
+  @apply text-center;
+  @apply transition-colors duration-150;
+  @apply cursor-pointer;
+
+  &:hover {
+    @apply border-ring bg-muted;
+  }
+  &:has(:focus-visible) {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  &-icon {
+    @apply size-8 text-muted-foreground;
+  }
+
+  &-text {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  &-hint {
+    @apply text-xs text-muted-foreground;
+  }
+
+  /* native file input, visually hidden but keyboard/AT accessible */
+  &-input {
+    @apply sr-only;
+  }
+
+  /* ── state modifiers ── */
+  &_dragover {
+    @apply border-ring bg-accent;
+    @apply outline-2 outline-offset-2 outline-ring;
+
+    & .dropzone-icon,
+    & .dropzone-text {
+      @apply text-accent-foreground;
+    }
+  }
+
+  &_disabled {
+    @apply bg-muted opacity-50 pointer-events-none;
+  }
+}
+
+/* ───────────────────────── File rows ───────────────────────── */
+
+.dropzone-filelist {
+  @apply mt-2 flex flex-col gap-2;
+}
+
+/* element: one row in the file list. Its children below are FLAT elements of the
+   `dropzone` block (fileIcon/fileName/fileSize/fileRemove), not nested under
+   `dropzone-fileRow` — "no elements of elements" (references/approaches.md). Each
+   is multi-word-joined camelCase per the skill's naming rule, not another hyphen. */
+.dropzone-fileRow {
+  @apply flex items-center gap-3;
+  @apply px-3 py-2;
+  @apply rounded-md border border-border bg-card text-card-foreground;
+}
+
+.dropzone-fileIcon {
+  @apply size-5 shrink-0 text-muted-foreground;
+}
+
+.dropzone-fileName {
+  @apply min-w-0 flex-1 truncate;
+  @apply text-sm text-foreground;
+}
+
+.dropzone-fileSize {
+  @apply shrink-0;
+  @apply text-xs text-muted-foreground;
+}
+
+.dropzone-fileRemove {
+  @apply inline-flex size-6 shrink-0 items-center justify-center;
+  @apply rounded-sm text-muted-foreground;
+  @apply cursor-pointer;
+
+  & svg {
+    @apply size-4;
+  }
+
+  &:hover {
+    @apply bg-danger text-danger-foreground;
+  }
+  &:focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+/* ───────────────────── Demo wrapper (layout only) ───────────────────── */
+
+.dropzoneDemo {
+  @apply flex flex-col gap-8;
+  @apply bg-background p-6 text-foreground;
+}

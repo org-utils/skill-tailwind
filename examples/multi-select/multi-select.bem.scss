@@ -1,0 +1,144 @@
+/*
+  EXAMPLE · multi-select · Approach (B): BEM + @apply — styles for multi-select.bem.html.
+
+  Same UI as multi-select.utility.html, expressed with @apply grouped by
+  property kind. Group order follows the engine's property-order:
+  layout/position → size → spacing → background/border/shape → typography →
+  effects/motion → interaction; then nested states; then modifiers.
+
+  BEM convention (default): block `multiselect`; element via single hyphen;
+  modifier via single underscore. `&`-nesting concatenates the literal suffix
+  onto the parent, so `&-tag` yields `.multiselect-tag` and `&_open` yields
+  `.multiselect_open`.
+
+  @reference — REQUIRED if this SCSS is compiled SEPARATELY from your Tailwind
+  entry: point it at the entry that does `@import "tailwindcss"`, otherwise
+  @apply cannot see the utilities/tokens. Drop this line if the file is part
+  of the same build that already imports tailwindcss.
+
+    @reference "../app.css";   // ← path to YOUR entry that imports tailwindcss
+
+  Tokens are the canonical SEMANTIC ones (templates/theme.css). Because every
+  color is a token that .dark overrides, the dark theme needs no extra rules.
+*/
+
+/* ───────────────────────── Field wrapper ───────────────────────── */
+
+.multiselectField {
+  @apply flex flex-col gap-1.5;
+
+  &_relative {
+    @apply relative;
+  }
+
+  &-label {
+    @apply text-sm font-medium text-foreground;
+
+    &_disabled {
+      @apply text-muted-foreground;
+    }
+  }
+}
+
+/* ───────────────────────── Multiselect field ───────────────────────── */
+
+.multiselect {
+  @apply flex min-h-10 flex-wrap items-center gap-1.5;
+  @apply rounded-md border border-input;
+  @apply px-2 py-1.5;
+  @apply bg-background;
+  @apply transition-colors duration-150;
+
+  &:focus-within {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  /* element: chip/tag for a selected value */
+  &-tag {
+    @apply inline-flex items-center gap-1;
+    @apply rounded-sm py-0.5 ps-2 pe-1;
+    @apply bg-accent text-xs font-medium text-accent-foreground;
+  }
+
+  /* element: the tag's own remove button — a FLAT element of the block (not nested
+     under &-tag): "no elements of elements" (references/approaches.md). Multi-word,
+     so it's joined camelCase per the skill's naming rule, not another hyphen. */
+  &-tagRemove {
+    @apply inline-flex size-4 items-center justify-center;
+    @apply rounded-sm text-accent-foreground/70;
+    @apply cursor-pointer;
+
+    & svg {
+      @apply size-3;
+    }
+
+    &:hover {
+      @apply bg-accent-foreground/10 text-accent-foreground;
+    }
+    &:focus-visible {
+      @apply outline-2 outline-offset-1 outline-ring;
+    }
+  }
+
+  /* element: the free-text field itself */
+  &-input {
+    @apply min-w-24 flex-1;
+    @apply px-1 py-0.5;
+    @apply bg-transparent text-sm text-foreground outline-none;
+
+    &::placeholder {
+      @apply text-muted-foreground;
+    }
+    &:disabled {
+      @apply cursor-not-allowed;
+    }
+  }
+
+  /* element: the open option list (list open/close itself is JS) */
+  &-list {
+    @apply absolute left-0 top-full z-20 mt-1;
+    @apply w-full max-h-56 overflow-auto;
+    @apply rounded-md border border-border p-1;
+    @apply bg-card text-card-foreground shadow-lg;
+  }
+
+  &-option {
+    @apply flex w-full items-center gap-2;
+    @apply rounded-sm px-2 py-1.5;
+    @apply text-left text-sm text-foreground;
+    @apply transition-colors duration-150;
+    @apply cursor-pointer;
+
+    &:hover {
+      @apply bg-accent text-accent-foreground;
+    }
+    &:focus-visible {
+      @apply outline-2 outline-offset-2 outline-ring;
+    }
+
+    &_active {
+      @apply bg-accent text-accent-foreground;
+    }
+  }
+
+  &-empty {
+    @apply px-2 py-1.5;
+    @apply text-sm text-muted-foreground;
+  }
+
+  /* ── state modifiers ── */
+  &_open {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  &_disabled {
+    @apply bg-muted opacity-50;
+  }
+}
+
+/* ───────────────────── Demo wrapper (layout only) ───────────────────── */
+
+.multiselectDemo {
+  @apply flex flex-col gap-8;
+  @apply bg-background p-6 text-foreground;
+}
